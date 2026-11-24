@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Account Pulse Host</masterLabel>
+    <description>Hosts the Account Pulse Angular app with lightning-ui-embedding.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__HomePage">
+            <property name="appUrl" type="String" label="Account Pulse app URL"
+                description="The URL of the deployed Account Pulse app (its *.salesforce.app address)." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

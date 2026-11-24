@@ -1,0 +1,35 @@
+<template>
+    <lightning-card title="Account Pulse" icon-name="standard:account">
+        <div class="slds-p-horizontal_medium">
+            <!-- Step 10: props in. A native Salesforce control drives the Angular app. -->
+            <lightning-radio-group
+                label="Filter the embedded app"
+                type="button"
+                options={industryOptions}
+                value={industry}
+                onchange={handleIndustryChange}>
+            </lightning-radio-group>
+
+            <lightning-ui-embedding
+                lwc:ref="embedding"
+                src={appUrl}
+                props={embedProps}
+                width="100%"
+                height="560">
+            </lightning-ui-embedding>
+
+            <!-- Step 11: events out. The account picked in Angular, shown with native components. -->
+            <template lwc:if={selectedId}>
+                <lightning-record-view-form record-id={selectedId} object-api-name="Account">
+                    <h2 class="slds-text-heading_small slds-m-top_medium slds-m-bottom_x-small">{selectedName}</h2>
+                    <div class="slds-grid slds-wrap">
+                        <lightning-output-field class="slds-size_1-of-2" field-name="Industry"></lightning-output-field>
+                        <lightning-output-field class="slds-size_1-of-2" field-name="AnnualRevenue"></lightning-output-field>
+                        <lightning-output-field class="slds-size_1-of-2" field-name="OwnerId"></lightning-output-field>
+                        <lightning-output-field class="slds-size_1-of-2" field-name="LastModifiedDate"></lightning-output-field>
+                    </div>
+                </lightning-record-view-form>
+            </template>
+        </div>
+    </lightning-card>
+</template>

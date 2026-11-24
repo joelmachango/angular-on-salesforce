@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
-import { createDataSDK } from '@salesforce/platform-sdk';
+import { type ViewSDK, createDataSDK, getViewSDK } from '@salesforce/platform-sdk';
 import { type I18nFormatters, createI18nFormatters, fetchI18nContext } from '@salesforce/platform-sdk/i18n';
 
 interface Account {
@@ -66,7 +66,12 @@ export class AccountPulseComponent implements OnInit {
 	// Formatters for the signed-in user's locale and currency, from Salesforce.
 	private readonly formatters = signal<I18nFormatters | null>(null);
 
+	// Embedded in a Lightning page? The host LWC talks to us through the View SDK.
+	private view?: ViewSDK;
+
 	async ngOnInit(): Promise<void> {
+		void this.connectToHost();
+
 		const sdk = await createDataSDK();
 		const [result, context] = await Promise.all([
 			sdk.graphql!.query<AccountPulseResult>({ query: ACCOUNTS }),
@@ -86,5 +91,26 @@ export class AccountPulseComponent implements OnInit {
 
 	protected money(value: number): string {
 		return this.formatters()?.formatCurrency(value, { maximumFractionDigits: 0 }) ?? String(value);
+	}
+
+	// Step 10: props in. The host LWC passes { industry } on <lightning-ui-embedding props>.
+	private async connectToHost(): Promise<void> {
+		this.view = await getViewSDK();
+		const ui = this.view.getUiState?.();
+		if (!ui) return; // opened from the App Launcher, not embedded
+
+		const apply = (props: { industry?: string }) => this.industry.set(props.industry || 'All');
+		apply(ui.state.props);
+		ui.subscribe((next) => apply(next.props));
+	}
+
+	// Step 11: events out. Tell the host which account was picked.
+	protected select(account: Account): void {
+		this.view?.dispatchEvent?.(
+			new CustomEvent('accountpulse.accountselected', {
+				detail: { recordId: account.id, name: account.name },
+				bubbles: true,
+			}),
+		);
 	}
 }

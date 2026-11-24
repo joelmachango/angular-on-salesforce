@@ -12,10 +12,16 @@
 
 	<ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 list-none p-0">
 		@for (account of visible(); track account.id) {
-			<li class="rounded-lg border border-gray-200 bg-white p-4">
-				<p class="font-medium text-gray-900">{{ account.name }}</p>
-				<p class="text-sm text-gray-600">{{ account.industry }}</p>
-				<p class="text-sm text-gray-900">{{ money(account.revenue) }}</p>
+			<li>
+				<button
+					type="button"
+					(click)="select(account)"
+					class="w-full text-left rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-500 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+				>
+					<span class="block font-medium text-gray-900">{{ account.name }}</span>
+					<span class="block text-sm text-gray-600">{{ account.industry }}</span>
+					<span class="block text-sm text-gray-900">{{ money(account.revenue) }}</span>
+				</button>
 			</li>
 		}
 	</ul>
