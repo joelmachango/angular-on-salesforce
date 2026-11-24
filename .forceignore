@@ -13,3 +13,5 @@ package.xml
 
 node_modules/
 .DS_Store
+# Seed data for scripts/org-setup.mjs (not metadata)
+force-app/main/default/data/
