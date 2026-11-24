@@ -5,7 +5,11 @@
         <visible>true</visible>
     </applicationVisibilities>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>accountpulse Access</label>
+    <label>Account Pulse Access</label>
+    <tabSettings>
+        <tab>Account_Pulse_Lightning</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
     <userPermissions>
         <enabled>true</enabled>
         <name>ApiEnabled</name>

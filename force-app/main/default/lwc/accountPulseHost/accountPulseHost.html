@@ -10,26 +10,33 @@
                 onchange={handleIndustryChange}>
             </lightning-radio-group>
 
-            <lightning-ui-embedding
-                lwc:ref="embedding"
-                src={appUrl}
-                props={embedProps}
-                width="100%"
-                height="560">
-            </lightning-ui-embedding>
+            <div class="slds-grid slds-gutters slds-m-top_small">
+                <div class="slds-col slds-size_2-of-3">
+                    <lightning-ui-embedding
+                        lwc:ref="embedding"
+                        src={appUrl}
+                        props={embedProps}
+                        width="100%"
+                        height="560">
+                    </lightning-ui-embedding>
+                </div>
 
-            <!-- Step 11: events out. The account picked in Angular, shown with native components. -->
+                <!-- Step 11: events out. The account picked in Angular, shown with native components. -->
+                <div class="slds-col slds-size_1-of-3">
             <template lwc:if={selectedId}>
                 <lightning-record-view-form record-id={selectedId} object-api-name="Account">
-                    <h2 class="slds-text-heading_small slds-m-top_medium slds-m-bottom_x-small">{selectedName}</h2>
-                    <div class="slds-grid slds-wrap">
-                        <lightning-output-field class="slds-size_1-of-2" field-name="Industry"></lightning-output-field>
-                        <lightning-output-field class="slds-size_1-of-2" field-name="AnnualRevenue"></lightning-output-field>
-                        <lightning-output-field class="slds-size_1-of-2" field-name="OwnerId"></lightning-output-field>
-                        <lightning-output-field class="slds-size_1-of-2" field-name="LastModifiedDate"></lightning-output-field>
-                    </div>
+                    <h2 class="slds-text-heading_medium slds-m-bottom_small">{selectedName}</h2>
+                    <lightning-output-field field-name="Industry"></lightning-output-field>
+                    <lightning-output-field field-name="AnnualRevenue"></lightning-output-field>
+                    <lightning-output-field field-name="OwnerId"></lightning-output-field>
+                    <lightning-output-field field-name="LastModifiedDate"></lightning-output-field>
                 </lightning-record-view-form>
             </template>
+            <template lwc:else>
+                <p class="slds-text-color_weak slds-m-top_medium">Pick an account in the app.</p>
+            </template>
+                </div>
+            </div>
         </div>
     </lightning-card>
 </template>
