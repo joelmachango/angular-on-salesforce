@@ -1,0 +1,139 @@
+{
+  "records": [
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef1"
+      },
+      "Name": "Tsavo Agritech",
+      "Industry": "Agriculture",
+      "AnnualRevenue": 4200000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef2"
+      },
+      "Name": "Kilifi Cashew Growers",
+      "Industry": "Agriculture",
+      "AnnualRevenue": 1850000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef3"
+      },
+      "Name": "Taita Hills Tea Co.",
+      "Industry": "Agriculture",
+      "AnnualRevenue": 3100000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef4"
+      },
+      "Name": "Malindi Mango Co-op",
+      "Industry": "Agriculture",
+      "AnnualRevenue": 950000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef5"
+      },
+      "Name": "Pwani Freight Lines",
+      "Industry": "Shipping",
+      "AnnualRevenue": 24500000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef6"
+      },
+      "Name": "Likoni Logistics",
+      "Industry": "Shipping",
+      "AnnualRevenue": 6800000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef7"
+      },
+      "Name": "Bandari Cargo Services",
+      "Industry": "Shipping",
+      "AnnualRevenue": 12300000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef8"
+      },
+      "Name": "Kilindini Harbour Agents",
+      "Industry": "Shipping",
+      "AnnualRevenue": 8700000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef9"
+      },
+      "Name": "Mtwapa Creek Lodge",
+      "Industry": "Hospitality",
+      "AnnualRevenue": 1200000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef10"
+      },
+      "Name": "Watamu Coral Retreat",
+      "Industry": "Hospitality",
+      "AnnualRevenue": 2750000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef11"
+      },
+      "Name": "Lamu Dhow Adventures",
+      "Industry": "Hospitality",
+      "AnnualRevenue": 640000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef12"
+      },
+      "Name": "Coast Code Labs",
+      "Industry": "Technology",
+      "AnnualRevenue": 1500000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef13"
+      },
+      "Name": "Nyali Cloud Solutions",
+      "Industry": "Technology",
+      "AnnualRevenue": 5400000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef14"
+      },
+      "Name": "Tudor Data Systems",
+      "Industry": "Technology",
+      "AnnualRevenue": 2200000
+    },
+    {
+      "attributes": {
+        "type": "Account",
+        "referenceId": "AccountRef15"
+      },
+      "Name": "Fort Jesus Software",
+      "Industry": "Technology",
+      "AnnualRevenue": 3900000
+    }
+  ]
+}

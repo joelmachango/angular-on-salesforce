@@ -10,7 +10,7 @@
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
     <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
-    <label>accountpulse</label>
+    <label>Account Pulse</label>
     <navType>Standard</navType>
     <uiBundle>c__accountpulse</uiBundle>
     <uiType>Lightning</uiType>
