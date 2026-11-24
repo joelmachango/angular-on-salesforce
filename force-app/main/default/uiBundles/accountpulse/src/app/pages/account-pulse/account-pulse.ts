@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
 import { createDataSDK } from '@salesforce/platform-sdk';
+import { type I18nFormatters, createI18nFormatters, fetchI18nContext } from '@salesforce/platform-sdk/i18n';
 
 interface Account {
 	id: string;
@@ -62,9 +63,16 @@ export class AccountPulseComponent implements OnInit {
 	);
 	protected readonly total = computed(() => this.visible().reduce((sum, a) => sum + a.revenue, 0));
 
+	// Formatters for the signed-in user's locale and currency, from Salesforce.
+	private readonly formatters = signal<I18nFormatters | null>(null);
+
 	async ngOnInit(): Promise<void> {
 		const sdk = await createDataSDK();
-		const result = await sdk.graphql!.query<AccountPulseResult>({ query: ACCOUNTS });
+		const [result, context] = await Promise.all([
+			sdk.graphql!.query<AccountPulseResult>({ query: ACCOUNTS }),
+			fetchI18nContext(sdk),
+		]);
+		this.formatters.set(createI18nFormatters(context));
 
 		this.accounts.set(
 			(result.data?.uiapi.query.Account?.edges ?? []).map((edge) => ({
@@ -74,5 +82,9 @@ export class AccountPulseComponent implements OnInit {
 				revenue: edge?.node?.AnnualRevenue?.value ?? 0,
 			})),
 		);
+	}
+
+	protected money(value: number): string {
+		return this.formatters()?.formatCurrency(value, { maximumFractionDigits: 0 }) ?? String(value);
 	}
 }
