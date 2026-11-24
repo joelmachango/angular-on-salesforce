@@ -1,115 +1,91 @@
-# Angular Internal App
+# Angular on Salesforce: Account Pulse
 
-An internal Angular starter template for the Salesforce platform. Includes an Agentforce conversation client and object search across Salesforce records; intended for internal (non-Experience Cloud) deployment via a CustomApplication in the Lightning Experience App Launcher. Built with Angular (standalone components), Spartan NG (`@spartan-ng/brain` primitives with helm UI components copied into `src/app/shared/`), Tailwind CSS, Lucide icons (`@ng-icons/lucide`), and TypeScript.
+An Angular app that runs **inside Salesforce** with Salesforce Multi-Framework, built live at **DevFest Pwani 2026** (Mombasa, Nov 28).
 
-## What's included
+It's based on the *Account Pulse* example in the Salesforce Developers Blog post [What's New in Salesforce Multi-Framework: Angular Is Now GA](https://developer.salesforce.com/blogs/2026/10/whats-new-in-salesforce-multi-framework-angular-is-now-ga) (Alice Oh and Charles Watkins, Oct 2026). Read it alongside this repo.
 
-This project ships the UI Bundle plus a CustomApplication that surfaces it in the Lightning Experience App Launcher. No additional data-model metadata (objects, Apex, etc.) is included — bring your own data model.
+![Account Pulse inside a Lightning page](docs/demo-embedded.png)
 
-```
-force-app/main/default/
-├── applications/                 # CustomApplication (App Launcher entry)
-├── permissionsets/               # Permission sets
-└── uiBundles/
-    └── accountpulse/            # Angular UI Bundle (source, config, tests)
-```
+## New to Salesforce? A quick map from Google
 
-## Getting started
+| You know (Google) | Salesforce |
+|---|---|
+| Firebase / GCP project | **Org**: your own Salesforce instance (a free Developer Edition is one) |
+| Firestore collection | **Object**, e.g. `Account` |
+| Document | **Record** |
+| Firebase Auth + Security Rules | Built-in sign-in, with object, field and sharing security **enforced on the server** |
+| Firebase JS SDK | **Data SDK** (`@salesforce/platform-sdk`), which sends GraphQL to Salesforce's UI API |
+| Lit (web components) | **Lightning Web Components (LWC)** |
 
-Install project dependencies and start the local dev server:
+## What the app does
 
-```bash
-npm install
-npm run sf-project-setup
-```
+- Reads Accounts with the Data SDK into Angular **signals**, and derives totals with `computed`.
+- Formats revenue in the signed-in user's locale and currency (USD → **Ksh** by changing a Salesforce setting, not code).
+- Runs on its own from the **App Launcher**, *and* embedded in a Lightning page:
+  - a native radio group passes `{ industry }` **into** the Angular app (View SDK `getUiState`),
+  - clicking an account sends `accountpulse.accountselected` **out**, and the page shows the record with native components.
 
-This installs the UI Bundle dependencies, builds the app, and starts the Salesforce Angular dev server (`sf-angular-serve`). For manual build and test instructions, see the [UI Bundle README](force-app/main/default/uiBundles/accountpulse/README.md).
+## Run it yourself (about 15 minutes)
 
-## Add features
+**You need:** Node.js 22+, the [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli), and a **fresh** free org.
 
-Use the features CLI to install additional UI features into the UI Bundle.
+> ⚠️ **Use a new, empty org.** `npm run setup` deletes **every Account** in the target org before loading the 15 demo Accounts. Never point it at an org with real data.
 
-List all available features:
+1. **Get a free org:** sign up at <https://developer.salesforce.com/signup>, then click the link in the welcome email and set a password.
+2. **Connect the CLI:**
+   ```bash
+   sf org login web --alias angular-on-salesforce --set-default
+   ```
+3. **Clone and set up** (build, deploy, permissions, demo data, GraphQL types):
+   ```bash
+   git clone https://github.com/joelmachango/angular-on-salesforce.git
+   cd angular-on-salesforce
+   npm install
+   npm run setup -- --target-org angular-on-salesforce --yes
+   ```
+4. **Open the app:** App Launcher (the grid icon, top left) → **Account Pulse**.
+5. **Embed it in a Lightning page.** The embed needs your org's app address, which is different for every org:
+   ```bash
+   sf data query -q "SELECT StartUrl FROM AppMenuItem WHERE Name='accountpulse'"
+   ```
+   It looks like `https://<your-domain>--c.develop.my.salesforce.app/app/c__accountpulse`. Put it in two files:
+   - `force-app/main/default/flexipages/Account_Pulse_Lightning.flexipage-meta.xml` → the `appUrl` value (full URL)
+   - `force-app/main/default/cspTrustedSites/Account_Pulse_App.cspTrustedSite-meta.xml` → `endpointUrl` (origin only, no path)
 
-```bash
-npx @salesforce/ui-bundle-features-experimental list
-```
+   Then deploy and open the **Account Pulse in Lightning** tab:
+   ```bash
+   sf project deploy start --source-dir force-app
+   ```
+6. **Optional, Kenyan shillings:** Setup → Company Information → Currency Locale **English (Kenya) – KES** (leave *Activate Multiple Currencies* off). In your user settings, set Locale **English (Kenya)** and Time Zone **Africa/Nairobi**. Reload the app.
 
-Get details about a specific feature (description, dependencies, files, and integration examples):
+## Follow the talk step by step
 
-```bash
-npx @salesforce/ui-bundle-features-experimental describe <feature-name>
-```
+Each step is a git tag: `git checkout step-07`.
 
-Install a feature:
+| Tag | Step |
+|---|---|
+| `step-03` | Project created from the `angularinternalapp` template |
+| `step-04` | Template extras removed; seed data added |
+| `step-07` | Data SDK GraphQL → `accounts` signal → `@for` |
+| `step-08` | `computed` filter and total |
+| `step-09` | Revenue in the user's currency (`@salesforce/platform-sdk/i18n`) |
+| `step-11` | Host LWC + Lightning page: props in, events out |
 
-```bash
-npx @salesforce/ui-bundle-features-experimental install <feature-name> --ui-bundle-dir accountpulse
-```
+The code to read: `force-app/main/default/uiBundles/accountpulse/src/app/pages/account-pulse/` (Angular) and `force-app/main/default/lwc/accountPulseHost/` (the LWC host).
 
-After installation, the CLI will list any `__example__` files that need manual integration. Read each example file to see the integration pattern, apply it to the target file, then delete the example file.
+## Good to know
 
-## Deploy
+- **Internal app, separate domain.** The app is served from `*.salesforce.app`, a separate origin for security, but only your org's users can open it.
+- **Client-side only:** no SSR and no server-held secrets. You own your npm dependencies.
+- **Hyperforce orgs only.** New Developer Edition orgs qualify.
+- **LWC changes not showing?** Hard-refresh the browser. Lightning caches components.
+- Free Developer Edition orgs may be deleted after 45 days without a login.
 
-### Deploy everything (CustomApplication + UI Bundle)
+## Learn more
 
-```bash
-cd force-app/main/default/uiBundles/accountpulse && npm install && npm run build && cd -
-sf project deploy start --source-dir force-app --target-org <alias>
-```
+- [Multi-Framework developer guide](https://developer.salesforce.com/docs/platform/multiframework/guide)
+- [UI Embedding (Microfrontend) guide](https://developer.salesforce.com/docs/platform/microfrontend/guide/get-started.html)
+- [Multi-Framework recipes](https://github.com/trailheadapps/multiframework-recipes), including the Angular and Microfrontend recipes
+- [Trailhead](https://trailhead.salesforce.com), free Salesforce learning
 
-### Deploy the UI Bundle only
-
-```bash
-cd force-app/main/default/uiBundles/accountpulse && npm install && npm run build && cd -
-sf project deploy start --source-dir force-app/main/default/uiBundles --target-org <alias>
-```
-
-Replace `<alias>` with your target org alias.
-
-## Setup scripts
-
-Two npm scripts at the project root streamline getting started and deployment.
-
-**`npm run sf-project-setup`** — installs the UI Bundle dependencies, builds the app, and starts the dev server (see [Getting started](#getting-started)).
-
-**`npm run setup`** — runs the full deployment setup in one command: org login (a required precondition, auto-skipped if already connected), UI Bundle build, deploy metadata, fetch GraphQL schema, and run codegen. It no longer starts the dev server — run `npm run dev:preview` for that:
-
-```bash
-# Install project dependencies first (required before running setup)
-npm install
-
-npm run setup -- --target-org <alias>
-```
-
-Running without flags presents an interactive step picker. Pass `--yes` to skip it and run all steps immediately:
-
-```bash
-npm run setup -- --target-org <alias> --yes
-```
-
-Common options:
-
-| Option                    | Description                                     |
-| ------------------------- | ----------------------------------------------- |
-| `--target-org <alias>`    | Target org. If omitted, uses default org/prompt |
-| `--skip-deploy`           | Do not deploy metadata                          |
-| `--skip-graphql`          | Skip GraphQL schema fetch and codegen           |
-| `--skip-ui-bundle-build`  | Skip `npm install` and UI Bundle build          |
-| `--ui-bundle-name <name>` | UI Bundle folder name when multiple exist       |
-| `-y, --yes`               | Skip interactive step picker; run all steps     |
-
-> Login is a required precondition (no `--skip-login`), and the dev server is no longer part of setup (no `--skip-dev`); both flags are accepted but ignored. To start the dev server after setup, run `npm run dev:preview`.
-
-For all options: `npm run setup -- --help`.
-
-## Configure Your Salesforce DX Project
-
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+The company names in the demo data are made up.
