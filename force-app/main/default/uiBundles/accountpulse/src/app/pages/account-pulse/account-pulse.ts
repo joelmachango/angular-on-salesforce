@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
 import { createDataSDK } from '@salesforce/platform-sdk';
 
 interface Account {
@@ -52,6 +52,15 @@ interface AccountPulseResult {
 })
 export class AccountPulseComponent implements OnInit {
 	protected readonly accounts = signal<Account[]>([]);
+	protected readonly industry = signal('All');
+
+	// Derived state: recalculated only when accounts() or industry() change.
+	protected readonly visible = computed(() =>
+		this.industry() === 'All'
+			? this.accounts()
+			: this.accounts().filter((a) => a.industry === this.industry()),
+	);
+	protected readonly total = computed(() => this.visible().reduce((sum, a) => sum + a.revenue, 0));
 
 	async ngOnInit(): Promise<void> {
 		const sdk = await createDataSDK();
