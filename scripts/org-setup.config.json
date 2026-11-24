@@ -1,0 +1,9 @@
+{
+  "permsetAssignments": {
+    "assignments": {
+      "accountpulse_Access": {
+        "assignee": "currentUser"
+      }
+    }
+  }
+}
