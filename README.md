@@ -68,8 +68,8 @@ Each step is a git tag: `git checkout step-07`.
 | Step 3 | `step-04` | Template extras removed; seed data added |
 | Step 5 | `step-07` | Data SDK GraphQL → `accounts` signal → `@for` |
 | Step 6 | `step-08` | `computed` filter and total |
-| Step 7 | `step-09` | Revenue in the user's currency (`@salesforce/platform-sdk/i18n`) |
-| Step 8 | `step-11` | Host LWC + Lightning page: props in, events out |
+| (aside) | `step-09` | Revenue in the user's currency (`@salesforce/platform-sdk/i18n`) |
+| Step 7 | `step-11` | Host LWC + Lightning page: props in, events out |
 | | `main` | Plus `loading` and `error` signals |
 
 (The tags keep the numbers from the full build log, which had a few behind-the-scenes steps.)
