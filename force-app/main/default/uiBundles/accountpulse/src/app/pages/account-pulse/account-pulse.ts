@@ -55,6 +55,10 @@ export class AccountPulseComponent implements OnInit {
 	protected readonly accounts = signal<Account[]>([]);
 	protected readonly industry = signal('All');
 
+	// Loading and error states, so the page never shows a misleading "0 accounts".
+	protected readonly loading = signal(true);
+	protected readonly error = signal<string | null>(null);
+
 	// Derived state: recalculated only when accounts() or industry() change.
 	protected readonly visible = computed(() =>
 		this.industry() === 'All'
@@ -72,25 +76,32 @@ export class AccountPulseComponent implements OnInit {
 	async ngOnInit(): Promise<void> {
 		void this.connectToHost();
 
-		const sdk = await createDataSDK();
-		const [result, context] = await Promise.all([
-			sdk.graphql!.query<AccountPulseResult>({ query: ACCOUNTS }),
-			fetchI18nContext(sdk),
-		]);
-		this.formatters.set(createI18nFormatters(context));
+		try {
+			const sdk = await createDataSDK();
+			const [result, context] = await Promise.all([
+				sdk.graphql!.query<AccountPulseResult>({ query: ACCOUNTS }),
+				// Nice to have: if the locale lookup fails, show plain numbers rather than no data.
+				fetchI18nContext(sdk).catch(() => null),
+			]);
+			if (context) this.formatters.set(createI18nFormatters(context));
 
-		this.accounts.set(
-			(result.data?.uiapi.query.Account?.edges ?? []).map((edge) => ({
-				id: edge?.node?.Id ?? '',
-				name: edge?.node?.Name?.value ?? '',
-				industry: edge?.node?.Industry?.value ?? '',
-				revenue: edge?.node?.AnnualRevenue?.value ?? 0,
-			})),
-		);
+			this.accounts.set(
+				(result.data?.uiapi.query.Account?.edges ?? []).map((edge) => ({
+					id: edge?.node?.Id ?? '',
+					name: edge?.node?.Name?.value ?? '',
+					industry: edge?.node?.Industry?.value ?? '',
+					revenue: edge?.node?.AnnualRevenue?.value ?? 0,
+				})),
+			);
+		} catch (e) {
+			this.error.set(e instanceof Error ? e.message : 'Could not load accounts.');
+		} finally {
+			this.loading.set(false);
+		}
 	}
 
 	protected money(value: number): string {
-		return this.formatters()?.formatCurrency(value, { maximumFractionDigits: 0 }) ?? String(value);
+		return this.formatters()?.formatCurrency(value, { maximumFractionDigits: 0 }) ?? value.toLocaleString();
 	}
 
 	// Step 10: props in. The host LWC passes { industry } on <lightning-ui-embedding props>.
