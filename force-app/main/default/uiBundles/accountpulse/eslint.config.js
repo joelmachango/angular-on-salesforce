@@ -18,9 +18,6 @@ export default defineConfig(
 			'.angular/**/*',
 			'coverage/**/*',
 			'node_modules/**/*',
-			// Vendored Spartan primitives use upstream hlm*/brn* selectors and are
-			// not authored here, so they can't satisfy the app-prefix/a11y rules.
-			'**/shared/**',
 		],
 	},
 	// TypeScript files

@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, signal } from '@angular/core';
 import { type ViewSDK, createDataSDK, getViewSDK } from '@salesforce/platform-sdk';
 import { type I18nFormatters, createI18nFormatters, fetchI18nContext } from '@salesforce/platform-sdk/i18n';
+// Generated from the query below and the org's schema by `npm run graphql:codegen`.
+import type { AccountPulseQuery } from '../../api/graphql-operations-types';
 
 interface Account {
 	id: string;
@@ -35,17 +37,6 @@ const ACCOUNTS = /* GraphQL */ `
 	}
 `;
 
-type Field<T> = { value?: T | null } | null | undefined;
-interface AccountPulseResult {
-	uiapi: {
-		query: {
-			Account?: {
-				edges?: ({ node?: { Id: string; Name?: Field<string>; Industry?: Field<string>; AnnualRevenue?: Field<number> } | null } | null)[] | null;
-			} | null;
-		};
-	};
-}
-
 @Component({
 	selector: 'app-account-pulse',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,7 +70,7 @@ export class AccountPulseComponent implements OnInit {
 		try {
 			const sdk = await createDataSDK();
 			const [result, context] = await Promise.all([
-				sdk.graphql!.query<AccountPulseResult>({ query: ACCOUNTS }),
+				sdk.graphql!.query<AccountPulseQuery>({ query: ACCOUNTS }),
 				// Nice to have: if the locale lookup fails, show plain numbers rather than no data.
 				fetchI18nContext(sdk).catch(() => null),
 			]);

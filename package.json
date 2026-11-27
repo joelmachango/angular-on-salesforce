@@ -1,11 +1,8 @@
 {
-  "name": "@salesforce/ui-bundle-template-base-sfdx-project",
-  "version": "12.13.0",
-  "description": "Base SFDX project template",
-  "license": "SEE LICENSE IN LICENSE.txt",
-  "publishConfig": {
-    "access": "public"
-  },
+  "name": "account-pulse",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Account Pulse: an Angular app inside Salesforce (DevFest Pwani 2026 demo)",
   "scripts": {
     "sf-project-setup": "node scripts/sf-project-setup.mjs",
     "build": "echo 'No build required for base-sfdx-project'",
