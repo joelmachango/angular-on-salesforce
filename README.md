@@ -29,7 +29,7 @@ It's based on the *Account Pulse* example in the Salesforce Developers Blog post
 
 **You need:** Node.js 22+, the [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli), and a **fresh** free org.
 
-> ⚠️ **Use a new, empty org.** `npm run setup` deletes **every Account** in the target org before loading the 15 demo Accounts. Never point it at an org with real data.
+> ⚠️ **Use a new, empty org.** `npm run setup` deletes **every Account** in the target org before loading the 16 demo Accounts. Never point it at an org with real data.
 
 1. **Get a free org:** sign up at <https://developer.salesforce.com/signup>, then click the link in the welcome email and set a password.
 2. **Connect the CLI:**
