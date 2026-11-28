@@ -60,19 +60,20 @@ It's based on the *Account Pulse* example in the Salesforce Developers Blog post
 
 ## Follow the talk step by step
 
-Each step is a git tag: `git checkout step-07`.
+Each slide step is a git tag with the same number: `git checkout step-5`.
 
 | Slide | Tag | What it adds |
 |---|---|---|
-| Step 2 | `step-03` | Project created from the `angularinternalapp` template |
-| Step 3 | `step-04` | Template extras removed; seed data added |
-| Step 5 | `step-07` | Data SDK GraphQL → `accounts` signal → `@for` |
-| Step 6 | `step-08` | `computed` filter and total |
-| (aside) | `step-09` | Revenue in the user's currency (`@salesforce/platform-sdk/i18n`) |
-| Step 7 | `step-11` | Host LWC + Lightning page: props in, events out |
+| Step 2 | `step-2` | Project created from the `angularinternalapp` template |
+| Step 3 | `step-3` | Template extras removed; seed data added |
+| Step 4 | `step-4` | Deploy (no code change: same commit as `step-3`) |
+| Step 5 | `step-5` | Data SDK GraphQL → `accounts` signal → `@for` |
+| Step 6 | `step-6` | `computed` filter and total |
+| (aside) | `aside-currency` | Revenue in the user's currency (`@salesforce/platform-sdk/i18n`) |
+| Step 7 | `step-7` | Host LWC + Lightning page: props in, events out |
 | | `main` | Plus `loading` and `error` signals |
 
-(The tags keep the numbers from the full build log, which had a few behind-the-scenes steps.)
+(Step 1, getting an org, has no code, so no tag.)
 
 The code to read: `force-app/main/default/uiBundles/accountpulse/src/app/pages/account-pulse/` (Angular) and `force-app/main/default/lwc/accountPulseHost/` (the LWC host).
 

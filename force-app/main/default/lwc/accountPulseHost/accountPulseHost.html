@@ -1,7 +1,7 @@
 <template>
     <lightning-card title="Account Pulse" icon-name="standard:account">
         <div class="slds-p-horizontal_medium">
-            <!-- Step 10: props in. A native Salesforce control drives the Angular app. -->
+            <!-- Step 7: props in. A native Salesforce control drives the Angular app. -->
             <lightning-radio-group
                 label="Filter the embedded app"
                 type="button"
@@ -21,7 +21,7 @@
                     </lightning-ui-embedding>
                 </div>
 
-                <!-- Step 11: events out. The account picked in Angular, shown with native components. -->
+                <!-- Step 7: events out. The account picked in Angular, shown with native components. -->
                 <div class="slds-col slds-size_1-of-3">
             <template lwc:if={selectedId}>
                 <lightning-record-view-form record-id={selectedId} object-api-name="Account">

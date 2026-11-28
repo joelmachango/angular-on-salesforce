@@ -95,7 +95,7 @@ export class AccountPulseComponent implements OnInit {
 		return this.formatters()?.formatCurrency(value, { maximumFractionDigits: 0 }) ?? value.toLocaleString();
 	}
 
-	// Step 10: props in. The host LWC passes { industry } on <lightning-ui-embedding props>.
+	// Step 7: props in. The host LWC passes { industry } on <lightning-ui-embedding props>.
 	private async connectToHost(): Promise<void> {
 		this.view = await getViewSDK();
 		const ui = this.view.getUiState?.();
@@ -106,7 +106,7 @@ export class AccountPulseComponent implements OnInit {
 		ui.subscribe((next) => apply(next.props));
 	}
 
-	// Step 11: events out. Tell the host which account was picked.
+	// Step 7: events out. Tell the host which account was picked.
 	protected select(account: Account): void {
 		this.view?.dispatchEvent?.(
 			new CustomEvent('accountpulse.accountselected', {
